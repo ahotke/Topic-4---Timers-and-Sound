@@ -10,18 +10,23 @@ namespace Topic_4___Timers_and_Sound
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        Texture2D bombTexture, snipsTexture;
+        bool exploded = false, timing = false;
+        
+        Texture2D bombTexture, snipsTexture, explosionTexture;
         SoundEffect explode;
-        Rectangle bombRect;
+        SoundEffectInstance explodeInstance;
+        Rectangle bombRect, wireRect;
 
         SpriteFont timeFont;
 
-        float seconds = 15;
+        MouseState mouseState, prevMouseState;
+
+        float seconds = 0;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
         }
 
         protected override void Initialize()
@@ -30,6 +35,8 @@ namespace Topic_4___Timers_and_Sound
 
             base.Initialize();
             bombRect = new Rectangle(50, 50, 700, 400);
+            wireRect = new Rectangle(490, 160, 150, 20);
+           
             
             _graphics.PreferredBackBufferWidth = 800;
             _graphics.PreferredBackBufferHeight = 500;
@@ -44,22 +51,52 @@ namespace Topic_4___Timers_and_Sound
 
             bombTexture = Content.Load<Texture2D>("bomb");
             timeFont = Content.Load<SpriteFont>("TimeFont");
+            snipsTexture = Content.Load<Texture2D>("snips");
+            explosionTexture = Content.Load<Texture2D>("boom");
             explode = Content.Load<SoundEffect>("explosion");
+            explodeInstance = explode.CreateInstance();
 
         }
 
         protected override void Update(GameTime gameTime)
         {
+            prevMouseState = mouseState;
+            mouseState = Mouse.GetState();
+            
+            this.Window.Title = $"x = {mouseState.X}, y = {mouseState.Y}";
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             // TODO: Add your update logic here
 
-            seconds -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (timing == false)
+            {
+                seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
 
-            if (seconds < 0)
-                explode.Play();
-                seconds = 15;
+            if (exploded)
+            {
+                if (explodeInstance.State == SoundState.Stopped)
+                {
+                    Exit();
+                }
+            }
+
+            if (mouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+            {
+                if (wireRect.Contains(mouseState.Position))
+                {
+                    timing = true;
+                }
+            }
+
+            if (seconds > 15 && exploded == false)
+            {
+                timing = true;
+                exploded = true;
+                explodeInstance.Play();
+                
+            } 
 
             base.Update(gameTime);
         }
@@ -71,7 +108,12 @@ namespace Topic_4___Timers_and_Sound
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
             _spriteBatch.Draw(bombTexture, bombRect, Color.White);
-            _spriteBatch.DrawString(timeFont, seconds.ToString("00.0"), new Vector2(290, 210), Color.DarkRed);
+            _spriteBatch.DrawString(timeFont, (15 - seconds).ToString("00.0"), new Vector2(305, 210), Color.DarkRed);
+            _spriteBatch.Draw(snipsTexture, mouseState.Position.ToVector2(), Color.White); 
+            if (exploded == true)
+            {
+                _spriteBatch.Draw(explosionTexture, bombRect, Color.White);
+            }
             _spriteBatch.End();
             base.Draw(gameTime);
         }

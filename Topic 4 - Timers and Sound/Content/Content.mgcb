@@ -14,12 +14,7 @@
 #---------------------------------- Content ---------------------------------#
 
 #begin digital-7.ttf
-/importer:XmlImporter
-/processor:FontTextureProcessor
-/processorParam:FirstCharacter= 
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Color
-/build:digital-7.ttf
+/copy:digital-7.ttf
 
 #begin explosion.wav
 /importer:WavImporter
@@ -27,14 +22,7 @@
 /processorParam:Quality=Best
 /build:explosion.wav
 
-#begin File.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:File.spritefont;TimeFont.spritefont
-
-#begin Untitled.png
+#begin explosion.webp
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -44,7 +32,26 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Untitled.png;Snips.png
+/build:explosion.webp;boom.webp
+
+#begin File.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:File.spritefont;TimeFont.spritefont
+
+#begin Snips.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Snips.png
 
 #begin X:/My Drive/Downloads/bomb.png
 /importer:TextureImporter
